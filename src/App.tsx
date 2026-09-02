@@ -5,6 +5,8 @@ import { ExplorePage } from './pages/ExplorePage'
 import { PlanPage } from './pages/PlanPage'
 import { MyAdventuresPage } from './pages/MyAdventuresPage'
 import { GuidePage } from './pages/GuidePage'
+import { SiteDetailPage } from './pages/SiteDetailPage'
+import { RegionDetailPage } from './pages/RegionDetailPage'
 
 export default function App() {
   return (
@@ -16,6 +18,8 @@ export default function App() {
           <Route path="/plan" element={<PlanPage />} />
           <Route path="/my-adventures" element={<MyAdventuresPage />} />
           <Route path="/guide" element={<GuidePage />} />
+          <Route path="/site/:kind/:id" element={<SiteDetailPage />} />
+          <Route path="/region/:id" element={<RegionDetailPage />} />
         </Routes>
       </AppShell>
     </BrowserRouter>

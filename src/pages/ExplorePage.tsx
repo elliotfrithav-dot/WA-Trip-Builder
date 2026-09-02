@@ -1,4 +1,5 @@
 import { useEffect, useState } from 'react'
+import { Link } from 'react-router-dom'
 import clsx from 'clsx'
 import { MapView, DEFAULT_LAYERS, type MapLayerVisibility } from '../components/map/MapView'
 import { Card } from '../components/ui/Card'
@@ -188,13 +189,12 @@ export function ExplorePage() {
           const cond = conditions[r.id]
           const wildlifeNow = wildlifeForRegion(r.id).filter((w) => w.season.monthsPossible.includes(month))
           return (
+            <Link key={r.id} to={`/region/${r.id}`} className="block" onMouseEnter={() => setSelectedRegionId(r.id)}>
             <Card
-              key={r.id}
               className={clsx(
                 'cursor-pointer overflow-hidden transition-shadow hover:shadow-md',
                 selectedRegionId === r.id && 'ring-2 ring-teal-700',
               )}
-              onClick={() => setSelectedRegionId(r.id)}
             >
               {r.heroImage && (
                 <div className="relative h-32 w-full">
@@ -231,6 +231,7 @@ export function ExplorePage() {
                 </div>
               </div>
             </Card>
+            </Link>
           )
         })}
       </div>

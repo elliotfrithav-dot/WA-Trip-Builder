@@ -1,5 +1,6 @@
 import { useEffect } from 'react'
 import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
+import { Link } from 'react-router-dom'
 import L from 'leaflet'
 import { regions, PERTH } from '../../data/regions'
 import { campsites } from '../../data/campsites'
@@ -48,6 +49,8 @@ interface MapViewProps {
   /** When provided, only these regions (and their sites) are shown — used by Explore's filters. */
   visibleRegionIds?: string[]
   layers?: MapLayerVisibility
+  /** Hides the Perth marker and fits tightly to the shown region(s) + sites, instead of the whole state — used by the region detail page's localised map. */
+  standalone?: boolean
 }
 
 const TYPE_LAYER_KEY: Record<ActivitySiteType, keyof MapLayerVisibility> = {
@@ -71,17 +74,20 @@ function FitToRegions({ points }: { points: [number, number][] }) {
   return null
 }
 
-export function MapView({ highlightedRegionId, height = '420px', visibleRegionIds, layers = DEFAULT_LAYERS }: MapViewProps) {
+export function MapView({ highlightedRegionId, height = '420px', visibleRegionIds, layers = DEFAULT_LAYERS, standalone = false }: MapViewProps) {
   const shownRegions = visibleRegionIds ? regions.filter((r) => visibleRegionIds.includes(r.id)) : regions
   const shownRegionIds = new Set(shownRegions.map((r) => r.id))
 
   const shownCampsites = layers.campsites ? campsites.filter((c) => shownRegionIds.has(c.regionId)) : []
   const shownSites = activitySites.filter((s) => shownRegionIds.has(s.regionId) && layers[TYPE_LAYER_KEY[s.type]])
 
-  const fitPoints: [number, number][] = [
-    [PERTH.lat, PERTH.lng],
-    ...shownRegions.map((r): [number, number] => [r.lat, r.lng]),
-  ]
+  const fitPoints: [number, number][] = standalone
+    ? [
+        ...shownRegions.map((r): [number, number] => [r.lat, r.lng]),
+        ...shownCampsites.map((c): [number, number] => [c.lat, c.lng]),
+        ...shownSites.map((s): [number, number] => [s.lat, s.lng]),
+      ]
+    : [[PERTH.lat, PERTH.lng], ...shownRegions.map((r): [number, number] => [r.lat, r.lng])]
 
   return (
     <div style={{ height }} className="overflow-hidden rounded-2xl border border-cream-300/70">
@@ -91,9 +97,11 @@ export function MapView({ highlightedRegionId, height = '420px', visibleRegionId
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
         <FitToRegions points={fitPoints} />
-        <Marker position={[PERTH.lat, PERTH.lng]} icon={emojiIcon(ICONS.perth)}>
-          <Popup>Perth (start location)</Popup>
-        </Marker>
+        {!standalone && (
+          <Marker position={[PERTH.lat, PERTH.lng]} icon={emojiIcon(ICONS.perth)}>
+            <Popup>Perth (start location)</Popup>
+          </Marker>
+        )}
         {shownRegions.map((r) => (
           <Marker
             key={r.id}
@@ -125,6 +133,8 @@ export function MapView({ highlightedRegionId, height = '420px', visibleRegionId
               )}
               <br />
               <span style={{ fontSize: '0.75em', opacity: 0.75 }}>{CONFIDENCE_LABEL[c.confidence]}</span>
+              <br />
+              <Link to={`/site/campsite/${c.id}`}>View full details →</Link>
             </Popup>
           </Marker>
         ))}
@@ -150,6 +160,8 @@ export function MapView({ highlightedRegionId, height = '420px', visibleRegionId
               )}
               <br />
               <span style={{ fontSize: '0.75em', opacity: 0.75 }}>{CONFIDENCE_LABEL[s.confidence]}</span>
+              <br />
+              <Link to={`/site/activity/${s.id}`}>View full details →</Link>
             </Popup>
           </Marker>
         ))}
