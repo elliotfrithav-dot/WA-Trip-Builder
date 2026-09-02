@@ -1,4 +1,5 @@
-import { MapContainer, TileLayer, Marker, Popup } from 'react-leaflet'
+import { useEffect } from 'react'
+import { MapContainer, TileLayer, Marker, Popup, useMap } from 'react-leaflet'
 import L from 'leaflet'
 import { regions, PERTH } from '../../data/regions'
 import { campsites } from '../../data/campsites'
@@ -55,6 +56,20 @@ const TYPE_LAYER_KEY: Record<ActivitySiteType, keyof MapLayerVisibility> = {
   beach: 'beach',
 }
 
+function FitToRegions({ points }: { points: [number, number][] }) {
+  const map = useMap()
+  const key = points.map((p) => p.join(',')).join('|')
+  useEffect(() => {
+    if (points.length > 1) {
+      map.fitBounds(points, { padding: [24, 24] })
+    } else if (points.length === 1) {
+      map.setView(points[0], 9)
+    }
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [key, map])
+  return null
+}
+
 export function MapView({ highlightedRegionId, height = '420px', visibleRegionIds, layers = DEFAULT_LAYERS }: MapViewProps) {
   const shownRegions = visibleRegionIds ? regions.filter((r) => visibleRegionIds.includes(r.id)) : regions
   const shownRegionIds = new Set(shownRegions.map((r) => r.id))
@@ -62,13 +77,19 @@ export function MapView({ highlightedRegionId, height = '420px', visibleRegionId
   const shownCampsites = layers.campsites ? campsites.filter((c) => shownRegionIds.has(c.regionId)) : []
   const shownSites = activitySites.filter((s) => shownRegionIds.has(s.regionId) && layers[TYPE_LAYER_KEY[s.type]])
 
+  const fitPoints: [number, number][] = [
+    [PERTH.lat, PERTH.lng],
+    ...shownRegions.map((r): [number, number] => [r.lat, r.lng]),
+  ]
+
   return (
     <div style={{ height }} className="overflow-hidden rounded-2xl border border-cream-300/70">
-      <MapContainer center={[-32.2, 115.5]} zoom={7} scrollWheelZoom style={{ height: '100%', width: '100%' }}>
+      <MapContainer center={[-27, 118]} zoom={5} scrollWheelZoom style={{ height: '100%', width: '100%' }}>
         <TileLayer
           attribution='&copy; <a href="https://www.openstreetmap.org/copyright">OpenStreetMap</a> contributors'
           url="https://{s}.tile.openstreetmap.org/{z}/{x}/{y}.png"
         />
+        <FitToRegions points={fitPoints} />
         <Marker position={[PERTH.lat, PERTH.lng]} icon={emojiIcon(ICONS.perth)}>
           <Popup>Perth (start location)</Popup>
         </Marker>

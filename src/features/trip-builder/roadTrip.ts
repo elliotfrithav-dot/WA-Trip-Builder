@@ -13,8 +13,38 @@ import type { Region } from '../../data/types'
 // Regions ordered by distance from Perth in each direction. North-beach and
 // Coogee (Perth-metro micro spots) are excluded — too close to make a
 // sensible road-trip "leg".
-const NORTH_CORRIDOR = ['two-rocks', 'yanchep', 'guilderton', 'lancelin', 'cervantes', 'jurien-bay']
-const SOUTH_CORRIDOR = ['fremantle', 'rockingham', 'mandurah', 'bunbury', 'busselton', 'dunsborough', 'yallingup', 'margaret-river']
+const NORTH_CORRIDOR = [
+  'two-rocks',
+  'yanchep',
+  'guilderton',
+  'lancelin',
+  'cervantes',
+  'jurien-bay',
+  'geraldton',
+  'kalbarri',
+  'shark-bay',
+  'carnarvon',
+  'coral-bay',
+  'exmouth',
+  'karratha',
+  'port-hedland',
+  'broome',
+]
+const SOUTH_CORRIDOR = [
+  'fremantle',
+  'rockingham',
+  'mandurah',
+  'bunbury',
+  'busselton',
+  'dunsborough',
+  'yallingup',
+  'margaret-river',
+  'augusta',
+  'walpole',
+  'denmark',
+  'albany',
+  'esperance',
+]
 
 function nightsBetween(start: string, end: string): number {
   const ms = new Date(end).getTime() - new Date(start).getTime()
@@ -52,9 +82,16 @@ async function buildCorridorOption(
   const totalNights = nightsBetween(criteria.startDate, criteria.endDate)
   const requestedStops = Math.max(2, Math.min(criteria.roadTripStops ?? 3, totalNights))
 
+  // Sanity cap: don't suggest a stop whose one-way drive from Perth alone
+  // would eat an unreasonable chunk of the whole trip (e.g. Broome on a
+  // 4-night trip). Generous 4h/night budget — still allows far stops on a
+  // genuinely long trip.
+  const maxOneWayDriveMin = totalNights * 240
+
   const candidates = corridorIds
     .map((id) => findRegion(id))
     .filter((r): r is Region => Boolean(r))
+    .filter((r) => r.driveTimeFromPerthMin <= maxOneWayDriveMin)
     .filter((r) => regionPassesCampingFilter(r, criteria) && regionDogOk(r, criteria))
 
   if (candidates.length < 2) return null // need at least 2 stops for a "road trip"
