@@ -16,9 +16,11 @@ const SECTIONS = [
   {
     title: 'Camp setup & fire safety',
     points: [
-      'Check current fire danger ratings and any total fire ban before lighting anything.',
+      'Check current fire danger ratings and any total fire ban before lighting anything — some DBCA campgrounds ban campfires year-round due to bushfire risk, not just in summer.',
       'Only camp in designated/legal sites — never on private land or closed reserves.',
+      'Most DBCA campgrounds (there are roughly 100 statewide) are basic: a cleared site and a pit toilet, no power, water or mobile reception. A handful have showers/rainwater — check facilities before you go, not after you arrive.',
       'Carry more water than you think you need; many WA coastal campsites have none.',
+      'DBCA camping fees are charged per person per night and vary by facility level — book and pay via parkstay.dbca.wa.gov.au.',
     ],
   },
   {
@@ -146,10 +148,10 @@ export function GuidePage() {
         photos in the Wildlife Calendar are also sourced from Wikimedia Commons, each credited on the image itself.
         4WD/sand-driving tyre-pressure and tide guidance adapted from Defender Adventure's WA beaches 4WD guide;
         camping spot details cross-checked against RAC WA, 4WDing Australia, We Are Explorers, Hipcamp, PerthIsOK,
-        4Xploring Rentals, The Urban List, Caravan World and Club4x4 where cited on individual campsites. Dive site
-        details cross-checked against Avenue Perth, RAC WA, Bucket List Diver and Scuba Down Under where cited on
-        individual sites. Wildlife seasonality for the Ningaloo/Shark Bay area informed by a general WA marine-life
-        sightings calendar the user shared.
+        4Xploring Rentals, The Urban List, Caravan World, Club4x4 and the official DBCA Explore Parks WA site where
+        cited on individual campsites. Dive site details cross-checked against Avenue Perth, RAC WA, Bucket List
+        Diver and Scuba Down Under where cited on individual sites. Wildlife seasonality for the Ningaloo/Shark Bay
+        area informed by a general WA marine-life sightings calendar the user shared.
       </p>
     </div>
   )

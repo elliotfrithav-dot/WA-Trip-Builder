@@ -4,6 +4,7 @@ import { PackingChecklist } from '../packing/PackingChecklist'
 import { RouteMap } from '../../components/map/RouteMap'
 import { SafetyCard } from '../../components/SafetyCard'
 import { findRegion } from '../../data/regions'
+import { CONFIDENCE_LABEL } from '../../lib/confidence'
 import type { ChecklistItem } from '../packing/types'
 import type { ItineraryDay, TripOption } from './types'
 
@@ -76,6 +77,9 @@ export function ItineraryView({
                     >
                       Book →
                     </a>
+                  )}
+                  {stop.confidence && (
+                    <p className="text-xs text-ink-300">{CONFIDENCE_LABEL[stop.confidence]}</p>
                   )}
                 </div>
               </li>

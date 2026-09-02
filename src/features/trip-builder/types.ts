@@ -1,4 +1,4 @@
-import type { ActivityTag, BudgetLevel, CampingType, ComfortLevel } from '../../data/types'
+import type { ActivityTag, BudgetLevel, CampingType, ComfortLevel, DataConfidence } from '../../data/types'
 import type { SiteConditionsResult } from '../../services/siteConditions'
 import type { ChecklistItem } from '../packing/types'
 
@@ -72,6 +72,7 @@ export interface ItineraryStop {
   description?: string
   costAud?: string
   bookingUrl?: string
+  confidence?: DataConfidence
 }
 
 export interface ItineraryDay {

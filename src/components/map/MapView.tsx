@@ -4,6 +4,7 @@ import L from 'leaflet'
 import { regions, PERTH } from '../../data/regions'
 import { campsites } from '../../data/campsites'
 import { activitySites } from '../../data/activitySites'
+import { CONFIDENCE_LABEL } from '../../lib/confidence'
 import type { ActivitySiteType } from '../../data/types'
 import 'leaflet/dist/leaflet.css'
 
@@ -122,6 +123,8 @@ export function MapView({ highlightedRegionId, height = '420px', visibleRegionId
                   </a>
                 </>
               )}
+              <br />
+              <span style={{ fontSize: '0.75em', opacity: 0.75 }}>{CONFIDENCE_LABEL[c.confidence]}</span>
             </Popup>
           </Marker>
         ))}
@@ -145,6 +148,8 @@ export function MapView({ highlightedRegionId, height = '420px', visibleRegionId
                   </a>
                 </>
               )}
+              <br />
+              <span style={{ fontSize: '0.75em', opacity: 0.75 }}>{CONFIDENCE_LABEL[s.confidence]}</span>
             </Popup>
           </Marker>
         ))}

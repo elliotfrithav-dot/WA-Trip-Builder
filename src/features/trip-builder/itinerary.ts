@@ -75,6 +75,7 @@ export async function generateItinerary(option: TripOption, criteria: TripCriter
         description: campsite ? 'Set up camp.' : undefined,
         costAud: campsite?.feesAud,
         bookingUrl: campsite?.bookingUrl,
+        confidence: campsite?.confidence,
       })
       stops.push({ time: sunset, title: 'Sunset', description: 'Good time for a beach walk or scenic lookout.' })
     } else if (i === totalDays - 1) {
@@ -198,6 +199,7 @@ async function buildRoadTripItinerary(
         description: campsite ? 'Set up camp.' : undefined,
         costAud: campsite?.feesAud,
         bookingUrl: campsite?.bookingUrl,
+        confidence: campsite?.confidence,
       },
       { time: sunset, title: 'Sunset', description: 'Good time for a beach walk or scenic lookout.' },
     ]
