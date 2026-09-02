@@ -2,6 +2,7 @@ import { Card } from '../../components/ui/Card'
 import { Button } from '../../components/ui/Button'
 import { PackingChecklist } from '../packing/PackingChecklist'
 import { RouteMap } from '../../components/map/RouteMap'
+import { SafetyCard } from '../../components/SafetyCard'
 import { findRegion } from '../../data/regions'
 import type { ChecklistItem } from '../packing/types'
 import type { ItineraryDay, TripOption } from './types'
@@ -38,6 +39,17 @@ export function ItineraryView({
       </div>
 
       {(() => {
+        if (option.stops && option.stops.length > 0) {
+          const stopRegions = option.stops.map((s) => findRegion(s.regionId)).filter((r): r is NonNullable<typeof r> => Boolean(r))
+          if (stopRegions.length === 0) return null
+          const [first, ...rest] = stopRegions
+          return (
+            <RouteMap
+              destination={{ lat: first.lat, lng: first.lng, name: first.name }}
+              waypoints={rest.map((r) => ({ lat: r.lat, lng: r.lng, name: r.name }))}
+            />
+          )
+        }
         const region = findRegion(option.regionId)
         return region ? <RouteMap destination={{ lat: region.lat, lng: region.lng, name: region.name }} /> : null
       })()}
@@ -60,6 +72,15 @@ export function ItineraryView({
           </ol>
         </Card>
       ))}
+
+      {(() => {
+        if (option.stops && option.stops.length > 0) {
+          const stopRegions = option.stops.map((s) => findRegion(s.regionId)).filter((r): r is NonNullable<typeof r> => Boolean(r))
+          return stopRegions.length > 0 ? <SafetyCard regions={stopRegions} /> : null
+        }
+        const region = findRegion(option.regionId)
+        return region ? <SafetyCard regions={[region]} /> : null
+      })()}
 
       <PackingChecklist items={packingList} onChange={onPackingListChange} />
 

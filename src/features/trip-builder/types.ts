@@ -3,7 +3,7 @@ import type { SiteConditionsResult } from '../../services/siteConditions'
 import type { ChecklistItem } from '../packing/types'
 
 export type DriveLimitHours = 1 | 2 | 3 | 4 | 5 | 6 | 8
-export type TripLength = 'day-trip' | 'multi-day'
+export type TripLength = 'day-trip' | 'multi-day' | 'road-trip'
 
 export interface TripCriteria {
   tripLength: TripLength
@@ -18,6 +18,19 @@ export interface TripCriteria {
   budget?: BudgetLevel
   /** Day-trip only: scan nearby days and surface the best one instead of just scoring startDate. */
   findBestDay?: boolean
+  /** Road-trip only: how many stops to plan for (2-4). */
+  roadTripStops?: number
+}
+
+/** One stop on a multi-location road trip. */
+export interface RoadTripStop {
+  regionId: string
+  nights: number
+  campsiteIds: string[]
+  activitySiteIds: string[]
+  /** Approximate drive from the previous stop (or Perth, for the first stop), in minutes. */
+  legDriveTimeMin: number
+  legDriveDistanceKm: number
 }
 
 export interface ScoreBreakdown {
@@ -47,6 +60,8 @@ export interface TripOption {
   conditionsGrade?: SiteConditionsResult
   /** Present when the user asked to find the best nearby day — the top-ranked day within the scan window. */
   bestDayRecommendation?: { date: string; result: SiteConditionsResult }
+  /** Present for road-trip options — the ordered list of stops. When set, regionId/driveTimeMin/driveDistanceKm above describe the FIRST stop and the total trip respectively is derived from this list. */
+  stops?: RoadTripStop[]
 }
 
 export interface ItineraryStop {

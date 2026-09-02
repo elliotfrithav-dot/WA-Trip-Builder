@@ -4,7 +4,8 @@ import type { Region } from './types'
 // reasonable estimates based on known highway routes from Perth CBD — they
 // are approximations for trip-scoring purposes, not authoritative RAC/Google
 // Maps figures. Treat as "needs verification" before relying on them for
-// fuel/time planning.
+// fuel/time planning. nearestFuelTown/nearestMedicalTown are general
+// knowledge, not sourced from a live directory — verify before remote travel.
 
 export const PERTH = { id: 'perth', name: 'Perth', lat: -31.9523, lng: 115.8613 }
 
@@ -18,6 +19,8 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 22,
     blurb: 'Reef-sheltered lagoons right in Perth — Mettams Pool and the MAAC snorkel trail, inside Marmion Marine Park.',
     activities: ['snorkelling', 'swimming', 'reef', 'beaches', 'scenic'],
+    nearestFuelTown: 'North Beach (Perth metro)',
+    nearestMedicalTown: 'Perth metro (e.g. Joondalup Health Campus)',
   },
   {
     id: 'coogee',
@@ -28,6 +31,8 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 30,
     blurb: 'A quiet southern-suburbs beach with a shore-accessible wreck and reef sculpture trail.',
     activities: ['snorkelling', 'swimming', 'reef', 'beaches'],
+    nearestFuelTown: 'Coogee/Munster (Perth metro)',
+    nearestMedicalTown: 'Fiona Stanley Hospital, Murdoch',
   },
   {
     id: 'two-rocks',
@@ -38,6 +43,8 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 55,
     blurb: 'Closest coastal escape north of Perth — limestone reefs, a marina and quiet beaches.',
     activities: ['snorkelling', 'swimming', 'beaches', 'scenic', 'shore-diving'],
+    nearestFuelTown: 'Two Rocks',
+    nearestMedicalTown: 'Joondalup Health Campus',
   },
   {
     id: 'yanchep',
@@ -48,6 +55,9 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 45,
     blurb: 'National park caves and koala boardwalk inland, wild beaches on the coast.',
     activities: ['hiking', 'flora', 'birdlife', 'beaches', 'scenic'],
+    nearestFuelTown: 'Yanchep',
+    nearestMedicalTown: 'Joondalup Health Campus',
+    parkPassRequired: true,
   },
   {
     id: 'lancelin',
@@ -58,6 +68,8 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 100,
     blurb: 'Iconic white dune system, wind/kite sports, and clear water over limestone reef.',
     activities: ['four-wd', 'snorkelling', 'beaches', 'photography', 'camping'],
+    nearestFuelTown: 'Lancelin',
+    nearestMedicalTown: 'Gingin (small hospital) or Joondalup Health Campus for major care',
   },
   {
     id: 'cervantes',
@@ -68,6 +80,9 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 140,
     blurb: 'Gateway to the Pinnacles Desert, with a low-key crayfishing-town coastline.',
     activities: ['scenic', 'four-wd', 'snorkelling', 'photography', 'camping'],
+    nearestFuelTown: 'Cervantes',
+    nearestMedicalTown: 'Jurien Bay Health Centre',
+    parkPassRequired: true,
   },
   {
     id: 'jurien-bay',
@@ -78,6 +93,8 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 150,
     blurb: 'Sheltered reef lagoon, sea lion colony offshore, and an easy dog-friendly foreshore.',
     activities: ['snorkelling', 'shore-diving', 'seals', 'reef', 'camping', 'beaches'],
+    nearestFuelTown: 'Jurien Bay',
+    nearestMedicalTown: 'Jurien Bay Health Centre',
   },
   {
     id: 'fremantle',
@@ -88,6 +105,8 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 25,
     blurb: 'Port city with harbour dives, ocean pools and the best food stops on this coast.',
     activities: ['scuba-diving', 'food', 'scenic', 'photography'],
+    nearestFuelTown: 'Fremantle',
+    nearestMedicalTown: 'Fiona Stanley Hospital, Murdoch',
   },
   {
     id: 'rockingham',
@@ -98,6 +117,8 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 40,
     blurb: 'Calm bays and the Shoalwater Islands marine park — sea lion snorkel tours and sheltered swimming.',
     activities: ['snorkelling', 'swimming', 'seals', 'dolphins', 'beaches'],
+    nearestFuelTown: 'Rockingham',
+    nearestMedicalTown: 'Rockingham General Hospital',
   },
   {
     id: 'mandurah',
@@ -108,6 +129,8 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 55,
     blurb: 'Estuary city with resident dolphin pods, canals and an easy weekend pace.',
     activities: ['dolphins', 'food', 'swimming', 'scenic'],
+    nearestFuelTown: 'Mandurah',
+    nearestMedicalTown: 'Peel Health Campus, Mandurah',
   },
   {
     id: 'bunbury',
@@ -118,6 +141,8 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 110,
     blurb: 'Regional hub with a resident dolphin colony right off the beach and easy access south.',
     activities: ['dolphins', 'swimming', 'beaches', 'food'],
+    nearestFuelTown: 'Bunbury',
+    nearestMedicalTown: 'Bunbury Hospital',
   },
   {
     id: 'busselton',
@@ -128,6 +153,8 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 140,
     blurb: 'Long jetty over an artificial reef, calm Geographe Bay water, and easy family camping.',
     activities: ['snorkelling', 'swimming', 'beaches', 'camping', 'food'],
+    nearestFuelTown: 'Busselton',
+    nearestMedicalTown: 'Busselton Health Campus',
   },
   {
     id: 'dunsborough',
@@ -138,6 +165,9 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 155,
     blurb: 'Sheltered bay diving and snorkelling at the cape, close to the HMAS Swan wreck dive.',
     activities: ['scuba-diving', 'snorkelling', 'beaches', 'photography', 'whales'],
+    nearestFuelTown: 'Dunsborough',
+    nearestMedicalTown: 'Busselton Health Campus',
+    parkPassRequired: true,
   },
   {
     id: 'yallingup',
@@ -148,6 +178,9 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 165,
     blurb: 'Rugged surf coast, sea caves, and forest trails minutes from the water.',
     activities: ['hiking', 'scenic', 'beaches', 'photography', 'flora'],
+    nearestFuelTown: 'Yallingup / Dunsborough',
+    nearestMedicalTown: 'Busselton Health Campus',
+    parkPassRequired: true,
   },
   {
     id: 'margaret-river',
@@ -158,6 +191,9 @@ export const regions: Region[] = [
     driveTimeFromPerthMin: 180,
     blurb: 'Caves, tall karri forest, world-class food and wine, and a wild, dramatic coastline.',
     activities: ['hiking', 'camping', 'food', 'scenic', 'flora', 'four-wd'],
+    nearestFuelTown: 'Margaret River',
+    nearestMedicalTown: 'Margaret River Hospital',
+    parkPassRequired: true,
   },
 ]
 

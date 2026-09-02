@@ -64,6 +64,7 @@ export function TripBuilderForm({ onSubmit, loading }: TripBuilderFormProps) {
   const [comfortLevel, setComfortLevel] = useState<ComfortLevel | undefined>()
   const [budget, setBudget] = useState<BudgetLevel | undefined>()
   const [findBestDay, setFindBestDay] = useState(true)
+  const [roadTripStops, setRoadTripStops] = useState(3)
 
   const toggleActivity = (tag: ActivityTag) => {
     setActivities((prev) => (prev.includes(tag) ? prev.filter((a) => a !== tag) : [...prev, tag]))
@@ -87,6 +88,7 @@ export function TripBuilderForm({ onSubmit, loading }: TripBuilderFormProps) {
       comfortLevel,
       budget,
       findBestDay: tripLength === 'day-trip' ? findBestDay : undefined,
+      roadTripStops: tripLength === 'road-trip' ? roadTripStops : undefined,
     })
   }
 
@@ -94,7 +96,7 @@ export function TripBuilderForm({ onSubmit, loading }: TripBuilderFormProps) {
     <div className="space-y-6">
       <Card className="p-5">
         <h3 className="mb-3 font-display text-sm font-semibold uppercase tracking-wide text-ink-500">Trip length</h3>
-        <div className="flex gap-2">
+        <div className="flex flex-col gap-2 sm:flex-row">
           <button
             onClick={() => setTripLength('day-trip')}
             className={clsx(
@@ -120,11 +122,52 @@ export function TripBuilderForm({ onSubmit, loading }: TripBuilderFormProps) {
           >
             🏕 Multi-day
             <span className={clsx('mt-0.5 block text-xs font-normal', tripLength === 'multi-day' ? 'text-cream-200' : 'text-ink-500')}>
-              Camping / overnight adventure
+              One base, camping / overnight
+            </span>
+          </button>
+          <button
+            onClick={() => setTripLength('road-trip')}
+            className={clsx(
+              'flex-1 rounded-xl border px-4 py-3 text-left text-sm font-medium transition-colors',
+              tripLength === 'road-trip'
+                ? 'border-teal-900 bg-teal-900 text-cream-50'
+                : 'border-cream-300 bg-white text-ink-700 hover:border-teal-500',
+            )}
+          >
+            🚐 Road trip
+            <span className={clsx('mt-0.5 block text-xs font-normal', tripLength === 'road-trip' ? 'text-cream-200' : 'text-ink-500')}>
+              Multiple stops along the coast
             </span>
           </button>
         </div>
       </Card>
+
+      {tripLength === 'road-trip' && (
+        <Card className="p-5">
+          <h3 className="mb-3 font-display text-sm font-semibold uppercase tracking-wide text-ink-500">
+            How many stops?
+          </h3>
+          <div className="flex flex-wrap gap-2">
+            {[2, 3, 4].map((n) => (
+              <button
+                key={n}
+                onClick={() => setRoadTripStops(n)}
+                className={clsx(
+                  'rounded-full border px-4 py-1.5 text-sm font-medium transition-colors',
+                  roadTripStops === n
+                    ? 'border-teal-900 bg-teal-900 text-cream-50'
+                    : 'border-cream-300 bg-white text-ink-700 hover:border-teal-500',
+                )}
+              >
+                {n} stops
+              </button>
+            ))}
+          </div>
+          <p className="mt-2 text-xs text-ink-500">
+            We'll pick a sensible route north or south of Perth and split your nights across the stops.
+          </p>
+        </Card>
+      )}
 
       <Card className="p-5">
         <h3 className="mb-3 font-display text-sm font-semibold uppercase tracking-wide text-ink-500">
@@ -274,7 +317,7 @@ export function TripBuilderForm({ onSubmit, loading }: TripBuilderFormProps) {
         </div>
       </Card>
 
-      {tripLength === 'multi-day' && (
+      {tripLength !== 'day-trip' && (
         <Card className="p-5">
           <h3 className="mb-3 font-display text-sm font-semibold uppercase tracking-wide text-ink-500">
             Camping preference

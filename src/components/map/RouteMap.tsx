@@ -24,15 +24,26 @@ function FitToRoute({ coordinates }: { coordinates: [number, number][] }) {
   return null
 }
 
-interface RouteMapProps {
-  destination: { lat: number; lng: number; name: string }
+interface RouteStop {
+  lat: number
+  lng: number
+  name: string
 }
 
-export function RouteMap({ destination }: RouteMapProps) {
+interface RouteMapProps {
+  destination: RouteStop
+  /** Additional stops after `destination`, in order, for a multi-leg road trip. */
+  waypoints?: RouteStop[]
+}
+
+export function RouteMap({ destination, waypoints = [] }: RouteMapProps) {
   const [origin, setOrigin] = useState<GeoPoint | null>(null)
   const [usingGps, setUsingGps] = useState(false)
   const [route, setRoute] = useState<RouteResult | null>(null)
   const [loading, setLoading] = useState(true)
+
+  const allStops = [destination, ...waypoints]
+  const waypointsKey = allStops.map((s) => `${s.lat},${s.lng}`).join('|')
 
   useEffect(() => {
     let cancelled = false
@@ -43,7 +54,7 @@ export function RouteMap({ destination }: RouteMapProps) {
       if (cancelled) return
       setOrigin(start)
       setUsingGps(Boolean(gps))
-      const result = await fetchDrivingRoute(start, destination)
+      const result = await fetchDrivingRoute([start, ...allStops])
       if (!cancelled) {
         setRoute(result)
         setLoading(false)
@@ -53,7 +64,7 @@ export function RouteMap({ destination }: RouteMapProps) {
       cancelled = true
     }
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [destination.lat, destination.lng])
+  }, [waypointsKey])
 
   if (loading || !origin || !route) {
     return (
@@ -86,7 +97,9 @@ export function RouteMap({ destination }: RouteMapProps) {
           }}
         />
         <Marker position={[origin.lat, origin.lng]} icon={pinIcon('📍')} />
-        <Marker position={[destination.lat, destination.lng]} icon={pinIcon('🏁')} />
+        {allStops.map((s, i) => (
+          <Marker key={`${s.lat}-${s.lng}`} position={[s.lat, s.lng]} icon={pinIcon(i === allStops.length - 1 ? '🏁' : '📌')} />
+        ))}
         <FitToRoute coordinates={route.coordinates} />
       </MapContainer>
       <div className="flex flex-wrap items-center justify-between gap-x-4 gap-y-1 bg-cream-50 px-4 py-2 text-xs text-ink-500">

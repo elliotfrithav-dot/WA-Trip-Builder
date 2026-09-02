@@ -5,6 +5,7 @@ import { Button } from '../../components/ui/Button'
 import { ScoreRing } from '../../components/ui/ScoreRing'
 import { formatDriveTime } from '../../services/distance'
 import { GRADE_LABEL, GRADE_EMOJI } from '../../services/siteConditions'
+import { findRegion } from '../../data/regions'
 import type { TripOption } from './types'
 
 function formatDayLabel(iso: string): string {
@@ -32,6 +33,19 @@ export function TripOptionCard({ option, rank, onBuild }: TripOptionCardProps) {
         </div>
         <ScoreRing score={option.score} />
       </div>
+
+      {option.stops && option.stops.length > 0 && (
+        <ol className="mt-3 flex flex-wrap items-center gap-1.5 text-sm text-ink-700">
+          {option.stops.map((s, i) => (
+            <li key={s.regionId} className="flex items-center gap-1.5">
+              {i > 0 && <span className="text-ink-300">→</span>}
+              <span className="rounded-full bg-cream-200 px-2.5 py-1">
+                {findRegion(s.regionId)?.name.split(' / ')[0] ?? s.regionId} · {s.nights}n
+              </span>
+            </li>
+          ))}
+        </ol>
+      )}
 
       <div className="mt-4 flex flex-wrap gap-2">
         <Badge>🚙 {formatDriveTime(option.driveTimeMin)} drive</Badge>

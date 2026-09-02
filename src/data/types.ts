@@ -58,6 +58,14 @@ export interface Region {
   blurb: string
   activities: ActivityTag[]
   heroImage?: string
+  /** Photo credit line, required whenever heroImage is set unless the source is public domain/CC0. */
+  heroImageCredit?: string
+  /** Nearest town with fuel, for remote-travel planning. General knowledge — verify before remote travel. */
+  nearestFuelTown?: string
+  /** Nearest town with a hospital or medical centre. General knowledge — verify before remote travel. */
+  nearestMedicalTown?: string
+  /** True if this region includes a DBCA national park requiring a Park Pass or day-entry fee. */
+  parkPassRequired?: boolean
 }
 
 export interface Campsite extends Sourced {

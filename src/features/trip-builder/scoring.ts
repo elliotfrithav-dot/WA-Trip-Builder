@@ -139,6 +139,9 @@ async function scoreMultiDayRegion(region: Region, criteria: TripCriteria): Prom
   // --- Tide (astronomical spring/neap estimate only) ---
   const tide = estimateTide(criteria.startDate)
   warnings.push(`Tide: ${tide.label}. ${tide.disclaimer}`)
+  if (region.parkPassRequired) {
+    warnings.push('This region includes a DBCA national park — a Park Pass or day-entry fee applies (exploreparks.dbca.wa.gov.au).')
+  }
 
   // --- Wildlife season ---
   const month = new Date(criteria.startDate).getMonth() + 1
@@ -314,6 +317,9 @@ async function scoreDayTripRegion(region: Region, criteria: TripCriteria): Promi
   // --- Tide (astronomical spring/neap estimate only) ---
   const tide = estimateTide(criteria.startDate)
   warnings.push(`Tide: ${tide.label}. ${tide.disclaimer}`)
+  if (region.parkPassRequired) {
+    warnings.push('This region includes a DBCA national park — a Park Pass or day-entry fee applies (exploreparks.dbca.wa.gov.au).')
+  }
 
   // --- Wildlife in season ---
   const month = new Date(criteria.startDate).getMonth() + 1

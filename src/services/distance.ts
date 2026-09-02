@@ -14,6 +14,18 @@ function toRad(deg: number): number {
   return (deg * Math.PI) / 180
 }
 
+/**
+ * Estimated driving time between two arbitrary points along this coastal
+ * corridor, in minutes. Straight-line distance inflated ~15% for real road
+ * routing, at an assumed ~80km/h average (consistent with the implied speed
+ * behind the seeded Perth-relative drive times) — approximate, not routed.
+ */
+export function estimateInterRegionDriveMin(a: { lat: number; lng: number }, b: { lat: number; lng: number }): number {
+  const roadKm = haversineKm(a, b) * 1.15
+  const avgSpeedKmh = 80
+  return (roadKm / avgSpeedKmh) * 60
+}
+
 export function formatDriveTime(minutes: number): string {
   const h = Math.floor(minutes / 60)
   const m = Math.round(minutes % 60)

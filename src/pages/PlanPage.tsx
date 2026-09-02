@@ -6,6 +6,7 @@ import { TripOptionCard } from '../features/trip-builder/TripOptionCard'
 import { TripComparison } from '../features/trip-builder/TripComparison'
 import { ItineraryView } from '../features/trip-builder/ItineraryView'
 import { generateTripOptions } from '../features/trip-builder/scoring'
+import { generateRoadTripOptions } from '../features/trip-builder/roadTrip'
 import { generateItinerary } from '../features/trip-builder/itinerary'
 import { generatePackingList } from '../features/packing/checklist'
 import { WildlifeCalendar } from '../features/wildlife-calendar/WildlifeCalendar'
@@ -34,11 +35,15 @@ export function PlanPage() {
     setError(null)
     setCriteria(c)
     try {
-      const results = await generateTripOptions(c)
+      const results = c.tripLength === 'road-trip' ? await generateRoadTripOptions(c) : await generateTripOptions(c)
       setOptions(results)
       setStage('results')
       if (results.length === 0) {
-        setError('No matching adventures found for these constraints — try increasing your drive time or relaxing a filter.')
+        setError(
+          c.tripLength === 'road-trip'
+            ? 'No viable road-trip route found for these constraints — try more nights, more stops, or relaxing an activity/camping filter.'
+            : 'No matching adventures found for these constraints — try increasing your drive time or relaxing a filter.',
+        )
       }
     } catch {
       setError('Something went wrong generating trip options. Please try again.')
