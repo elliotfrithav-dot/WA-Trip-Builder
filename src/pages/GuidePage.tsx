@@ -145,8 +145,9 @@ export function GuidePage() {
         Australian sea lion photo by Brian M. Hunt (CC BY-SA 3.0). Destination photos on Explore cards and species
         photos in the Wildlife Calendar are also sourced from Wikimedia Commons, each credited on the image itself.
         4WD/sand-driving tyre-pressure and tide guidance adapted from Defender Adventure's WA beaches 4WD guide;
-        camping spot details cross-checked against RAC WA, 4WDing Australia, We Are Explorers, Hipcamp and
-        PerthIsOK where cited on individual campsites.
+        camping spot details cross-checked against RAC WA, 4WDing Australia, We Are Explorers, Hipcamp, PerthIsOK,
+        4Xploring Rentals, The Urban List, Caravan World and Club4x4 where cited on individual campsites. Dive site
+        details cross-checked against Avenue Perth, RAC WA and Bucket List Diver where cited on individual sites.
       </p>
     </div>
   )

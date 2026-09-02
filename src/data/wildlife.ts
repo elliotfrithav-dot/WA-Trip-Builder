@@ -137,7 +137,7 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     scientificName: 'Phyllopteryx taeniolatus',
     emoji: '🐉',
     category: 'marine',
-    bestRegionIds: ['rockingham', 'two-rocks', 'north-beach', 'dunsborough'],
+    bestRegionIds: ['rockingham', 'two-rocks', 'north-beach', 'dunsborough', 'coogee'],
     season: { monthsPeak: [], monthsPossible: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
     habitat: 'Temperate reef, seagrass and jetty pylons with kelp/weed cover',
     behaviour: 'Slow-moving and superbly camouflaged — patient, careful looking required',
