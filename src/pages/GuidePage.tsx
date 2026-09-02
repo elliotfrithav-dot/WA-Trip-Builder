@@ -142,8 +142,9 @@ export function GuidePage() {
       <p className="text-xs text-ink-300">
         Background photography via Wikimedia Commons: dolphin (NASA, public domain), whale (Brigitte Werner/Pixabay,
         CC0), turtle & reef fish (US Fish &amp; Wildlife Service, public domain), Hamelin Bay beach (public domain),
-        Australian sea lion photo by Brian M. Hunt (CC BY-SA 3.0). 4WD/sand-driving tyre-pressure and tide guidance
-        adapted from Defender Adventure's WA beaches 4WD guide.
+        Australian sea lion photo by Brian M. Hunt (CC BY-SA 3.0). Destination photos on Explore cards are also
+        sourced from Wikimedia Commons, each credited on the image itself. 4WD/sand-driving tyre-pressure and tide
+        guidance adapted from Defender Adventure's WA beaches 4WD guide.
       </p>
     </div>
   )

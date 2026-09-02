@@ -6,7 +6,7 @@ import { findRegion } from '../../data/regions'
 import { campsitesForRegion } from '../../data/campsites'
 import { activitySitesForRegion } from '../../data/activitySites'
 import { MONTH_NAMES } from '../../lib/dates'
-import type { WildlifeSpecies } from '../../data/types'
+import type { WildlifeSpecies, WildlifeCategory } from '../../data/types'
 
 const LIKELIHOOD_LABEL: Record<WildlifeSpecies['likelihood'], string> = {
   common: 'Common',
@@ -15,13 +15,24 @@ const LIKELIHOOD_LABEL: Record<WildlifeSpecies['likelihood'], string> = {
   rare: 'Rare',
 }
 
+const CATEGORY_LABEL: Record<WildlifeCategory, { label: string; emoji: string }> = {
+  marine: { label: 'Marine', emoji: '🐬' },
+  bird: { label: 'Birds', emoji: '🦅' },
+  'land-animal': { label: 'Land animals', emoji: '🦘' },
+  plant: { label: 'Flora', emoji: '🌿' },
+}
+const CATEGORY_ORDER: WildlifeCategory[] = ['marine', 'bird', 'land-animal', 'plant']
+
 export function WildlifeCalendar() {
   const [mode, setMode] = useState<'month' | 'species'>('month')
   const [month, setMonth] = useState(new Date().getMonth() + 1)
+  const [category, setCategory] = useState<WildlifeCategory | 'all'>('all')
   const [speciesId, setSpeciesId] = useState(wildlifeSpecies[0]?.id)
 
-  const species = wildlifeSpecies.find((w) => w.id === speciesId)
-  const monthResults = wildlifeForMonth(month)
+  const filteredSpecies = category === 'all' ? wildlifeSpecies : wildlifeSpecies.filter((w) => w.category === category)
+  const selectedSpeciesId = filteredSpecies.some((w) => w.id === speciesId) ? speciesId : filteredSpecies[0]?.id
+  const species = wildlifeSpecies.find((w) => w.id === selectedSpeciesId)
+  const monthResults = wildlifeForMonth(month).filter((w) => category === 'all' || w.category === category)
 
   return (
     <div className="space-y-5">
@@ -46,6 +57,32 @@ export function WildlifeCalendar() {
         >
           Look up a species
         </button>
+      </div>
+
+      <div className="flex flex-wrap gap-1.5">
+        <button
+          onClick={() => setCategory('all')}
+          className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+            category === 'all'
+              ? 'border-teal-900 bg-teal-900 text-cream-50'
+              : 'border-cream-300 bg-white text-ink-700 hover:border-teal-500'
+          }`}
+        >
+          All
+        </button>
+        {CATEGORY_ORDER.map((c) => (
+          <button
+            key={c}
+            onClick={() => setCategory(c)}
+            className={`rounded-full border px-3 py-1.5 text-xs font-medium transition-colors ${
+              category === c
+                ? 'border-teal-900 bg-teal-900 text-cream-50'
+                : 'border-cream-300 bg-white text-ink-700 hover:border-teal-500'
+            }`}
+          >
+            {CATEGORY_LABEL[c].emoji} {CATEGORY_LABEL[c].label}
+          </button>
+        ))}
       </div>
 
       {mode === 'month' && (
@@ -98,11 +135,11 @@ export function WildlifeCalendar() {
       {mode === 'species' && species && (
         <>
           <select
-            value={speciesId}
+            value={selectedSpeciesId}
             onChange={(e) => setSpeciesId(e.target.value)}
             className="w-full rounded-lg border border-cream-300 bg-white px-3 py-2 text-sm"
           >
-            {wildlifeSpecies.map((w) => (
+            {filteredSpecies.map((w) => (
               <option key={w.id} value={w.id}>
                 {w.emoji} {w.commonName}
               </option>
@@ -146,16 +183,20 @@ export function WildlifeCalendar() {
             <dl className="mt-4 space-y-2 text-sm">
               <Row label="Habitat" value={species.habitat} />
               <Row label="Behaviour" value={species.behaviour} />
-              <Row
-                label="Encounter method"
-                value={species.boatOnly ? 'Boat / tour only' : 'Can be seen from shore'}
-              />
-              <Row
-                label="Snorkel / dive suitable"
-                value={[species.snorkelSuitable && 'Snorkelling', species.diveSuitable && 'Diving']
-                  .filter(Boolean)
-                  .join(', ') || 'Not typically encountered in the water'}
-              />
+              {species.category === 'marine' && (
+                <>
+                  <Row
+                    label="Encounter method"
+                    value={species.boatOnly ? 'Boat / tour only' : 'Can be seen from shore'}
+                  />
+                  <Row
+                    label="Snorkel / dive suitable"
+                    value={[species.snorkelSuitable && 'Snorkelling', species.diveSuitable && 'Diving']
+                      .filter(Boolean)
+                      .join(', ') || 'Not typically encountered in the water'}
+                  />
+                </>
+              )}
               {species.safety && <Row label="Safety" value={species.safety} />}
               {species.conservationStatus && <Row label="Conservation status" value={species.conservationStatus} />}
             </dl>

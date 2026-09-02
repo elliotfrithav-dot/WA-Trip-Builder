@@ -1,4 +1,14 @@
 import type { Region } from './types'
+import yanchepImg from '../assets/destinations/yanchep.jpg'
+import lancelinImg from '../assets/destinations/lancelin.jpg'
+import cervantesImg from '../assets/destinations/cervantes.jpg'
+import jurienBayImg from '../assets/destinations/jurien-bay.jpg'
+import fremantleImg from '../assets/destinations/fremantle.jpg'
+import mandurahImg from '../assets/destinations/mandurah.jpg'
+import bunburyImg from '../assets/destinations/bunbury.jpg'
+import busseltonImg from '../assets/destinations/busselton.jpg'
+import yallingupImg from '../assets/destinations/yallingup.jpg'
+import margaretRiverImg from '../assets/destinations/margaret-river.jpg'
 
 // Coordinates are real/public (town centres). Drive distance/time are
 // reasonable estimates based on known highway routes from Perth CBD — they
@@ -58,6 +68,8 @@ export const regions: Region[] = [
     nearestFuelTown: 'Yanchep',
     nearestMedicalTown: 'Joondalup Health Campus',
     parkPassRequired: true,
+    heroImage: yanchepImg,
+    heroImageCredit: 'Public domain (Ausxan, Wikimedia Commons)',
   },
   {
     id: 'lancelin',
@@ -70,6 +82,8 @@ export const regions: Region[] = [
     activities: ['four-wd', 'snorkelling', 'beaches', 'photography', 'camping'],
     nearestFuelTown: 'Lancelin',
     nearestMedicalTown: 'Gingin (small hospital) or Joondalup Health Campus for major care',
+    heroImage: lancelinImg,
+    heroImageCredit: 'CC BY-SA 4.0 (CyclonicallyDeranged, Wikimedia Commons)',
   },
   {
     id: 'cervantes',
@@ -83,6 +97,8 @@ export const regions: Region[] = [
     nearestFuelTown: 'Cervantes',
     nearestMedicalTown: 'Jurien Bay Health Centre',
     parkPassRequired: true,
+    heroImage: cervantesImg,
+    heroImageCredit: 'CC0 (Unsplash via Wikimedia Commons)',
   },
   {
     id: 'jurien-bay',
@@ -95,6 +111,8 @@ export const regions: Region[] = [
     activities: ['snorkelling', 'shore-diving', 'seals', 'reef', 'camping', 'beaches'],
     nearestFuelTown: 'Jurien Bay',
     nearestMedicalTown: 'Jurien Bay Health Centre',
+    heroImage: jurienBayImg,
+    heroImageCredit: 'CC0 (Wikimedia Commons)',
   },
   {
     id: 'fremantle',
@@ -107,6 +125,8 @@ export const regions: Region[] = [
     activities: ['scuba-diving', 'food', 'scenic', 'photography'],
     nearestFuelTown: 'Fremantle',
     nearestMedicalTown: 'Fiona Stanley Hospital, Murdoch',
+    heroImage: fremantleImg,
+    heroImageCredit: 'CC BY 2.5 AU (Gnangarra, Wikimedia Commons)',
   },
   {
     id: 'rockingham',
@@ -131,6 +151,8 @@ export const regions: Region[] = [
     activities: ['dolphins', 'food', 'swimming', 'scenic'],
     nearestFuelTown: 'Mandurah',
     nearestMedicalTown: 'Peel Health Campus, Mandurah',
+    heroImage: mandurahImg,
+    heroImageCredit: 'CC BY 2.0 (Wikimedia Commons)',
   },
   {
     id: 'bunbury',
@@ -143,6 +165,8 @@ export const regions: Region[] = [
     activities: ['dolphins', 'swimming', 'beaches', 'food'],
     nearestFuelTown: 'Bunbury',
     nearestMedicalTown: 'Bunbury Hospital',
+    heroImage: bunburyImg,
+    heroImageCredit: 'CC BY-SA 4.0 (Wikimedia Commons)',
   },
   {
     id: 'busselton',
@@ -155,6 +179,8 @@ export const regions: Region[] = [
     activities: ['snorkelling', 'swimming', 'beaches', 'camping', 'food'],
     nearestFuelTown: 'Busselton',
     nearestMedicalTown: 'Busselton Health Campus',
+    heroImage: busseltonImg,
+    heroImageCredit: 'CC BY-SA 4.0 (Bahnfrend, Wikimedia Commons)',
   },
   {
     id: 'dunsborough',
@@ -181,6 +207,8 @@ export const regions: Region[] = [
     nearestFuelTown: 'Yallingup / Dunsborough',
     nearestMedicalTown: 'Busselton Health Campus',
     parkPassRequired: true,
+    heroImage: yallingupImg,
+    heroImageCredit: 'CC BY-SA 4.0 (Lasthib, Wikimedia Commons)',
   },
   {
     id: 'margaret-river',
@@ -194,6 +222,8 @@ export const regions: Region[] = [
     nearestFuelTown: 'Margaret River',
     nearestMedicalTown: 'Margaret River Hospital',
     parkPassRequired: true,
+    heroImage: margaretRiverImg,
+    heroImageCredit: 'CC BY-SA 4.0 (Lasthib, Wikimedia Commons)',
   },
 ]
 

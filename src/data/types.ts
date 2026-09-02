@@ -113,11 +113,14 @@ export interface WildlifeSeasonWindow {
   monthsPossible: number[]
 }
 
+export type WildlifeCategory = 'marine' | 'bird' | 'land-animal' | 'plant'
+
 export interface WildlifeSpecies {
   id: string
   commonName: string
   scientificName: string
   emoji: string
+  category: WildlifeCategory
   bestRegionIds: string[]
   season: WildlifeSeasonWindow
   habitat: string

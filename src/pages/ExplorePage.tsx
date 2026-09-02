@@ -191,32 +191,44 @@ export function ExplorePage() {
             <Card
               key={r.id}
               className={clsx(
-                'cursor-pointer p-4 transition-shadow hover:shadow-md',
+                'cursor-pointer overflow-hidden transition-shadow hover:shadow-md',
                 selectedRegionId === r.id && 'ring-2 ring-teal-700',
               )}
               onClick={() => setSelectedRegionId(r.id)}
             >
-              <div className="flex items-start justify-between gap-2">
-                <h3 className="font-display font-semibold text-ink-900">{r.name}</h3>
-                {cond && cond !== 'loading' && cond !== 'error' && (
-                  <Badge tone={cond.grade === 'excellent' || cond.grade === 'good' ? 'good' : 'warn'}>
-                    {GRADE_EMOJI[cond.grade]} {GRADE_LABEL[cond.grade]}
-                  </Badge>
-                )}
-              </div>
-              <p className="mt-1 text-xs text-ink-500">{r.blurb}</p>
-              <div className="mt-3 flex flex-wrap gap-1.5">
-                <Badge>🚙 {formatDriveTime(r.driveTimeFromPerthMin)}</Badge>
-                {r.activities.slice(0, 3).map((a) => (
-                  <Badge key={a}>
-                    {ACTIVITY_META[a].emoji} {ACTIVITY_META[a].label}
-                  </Badge>
-                ))}
-                {wildlifeNow.length > 0 && (
-                  <Badge tone="accent">
-                    {wildlifeNow.map((w) => w.emoji).join(' ')} in season
-                  </Badge>
-                )}
+              {r.heroImage && (
+                <div className="relative h-32 w-full">
+                  <img src={r.heroImage} alt="" className="h-full w-full object-cover" />
+                  {r.heroImageCredit && (
+                    <span className="absolute bottom-1 right-1.5 rounded bg-ink-900/50 px-1.5 py-0.5 text-[10px] text-cream-50">
+                      {r.heroImageCredit}
+                    </span>
+                  )}
+                </div>
+              )}
+              <div className="p-4">
+                <div className="flex items-start justify-between gap-2">
+                  <h3 className="font-display font-semibold text-ink-900">{r.name}</h3>
+                  {cond && cond !== 'loading' && cond !== 'error' && (
+                    <Badge tone={cond.grade === 'excellent' || cond.grade === 'good' ? 'good' : 'warn'}>
+                      {GRADE_EMOJI[cond.grade]} {GRADE_LABEL[cond.grade]}
+                    </Badge>
+                  )}
+                </div>
+                <p className="mt-1 text-xs text-ink-500">{r.blurb}</p>
+                <div className="mt-3 flex flex-wrap gap-1.5">
+                  <Badge>🚙 {formatDriveTime(r.driveTimeFromPerthMin)}</Badge>
+                  {r.activities.slice(0, 3).map((a) => (
+                    <Badge key={a}>
+                      {ACTIVITY_META[a].emoji} {ACTIVITY_META[a].label}
+                    </Badge>
+                  ))}
+                  {wildlifeNow.length > 0 && (
+                    <Badge tone="accent">
+                      {wildlifeNow.map((w) => w.emoji).join(' ')} in season
+                    </Badge>
+                  )}
+                </div>
               </div>
             </Card>
           )
