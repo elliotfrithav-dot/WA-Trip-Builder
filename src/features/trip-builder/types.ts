@@ -70,6 +70,8 @@ export interface ItineraryStop {
   time: string
   title: string
   description?: string
+  costAud?: string
+  bookingUrl?: string
 }
 
 export interface ItineraryDay {

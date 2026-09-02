@@ -73,6 +73,8 @@ export async function generateItinerary(option: TripOption, criteria: TripCriter
         time: minutesLater('15:30', region.driveTimeFromPerthMin),
         title: campsite ? `Arrive at ${campsite.name}` : `Arrive in ${region.name}`,
         description: campsite ? 'Set up camp.' : undefined,
+        costAud: campsite?.feesAud,
+        bookingUrl: campsite?.bookingUrl,
       })
       stops.push({ time: sunset, title: 'Sunset', description: 'Good time for a beach walk or scenic lookout.' })
     } else if (i === totalDays - 1) {
@@ -104,7 +106,13 @@ function buildMiddleDayStops(
 
   if (morningBlocks.length > 0) {
     const block = morningBlocks[middleDayIndex % morningBlocks.length]
-    stops.push({ time: '08:00', title: `${activityVerb(block.type)} — ${block.name}`, description: block.notes })
+    stops.push({
+      time: '08:00',
+      title: `${activityVerb(block.type)} — ${block.name}`,
+      description: block.notes,
+      costAud: block.costAud,
+      bookingUrl: block.bookingUrl,
+    })
   } else {
     stops.push({
       time: '09:00',
@@ -121,6 +129,8 @@ function buildMiddleDayStops(
       time: '14:00',
       title: `${activityVerb(afternoonBlock.type)} — ${afternoonBlock.name}`,
       description: afternoonBlock.notes,
+      costAud: afternoonBlock.costAud,
+      bookingUrl: afternoonBlock.bookingUrl,
     })
   } else {
     stops.push({ time: '14:00', title: 'Scenic drive / rest', description: 'Explore the local area at an easy pace.' })
@@ -186,6 +196,8 @@ async function buildRoadTripItinerary(
         time: minutesLater('09:00', stop.legDriveTimeMin),
         title: campsite ? `Arrive at ${campsite.name}` : `Arrive in ${region.name}`,
         description: campsite ? 'Set up camp.' : undefined,
+        costAud: campsite?.feesAud,
+        bookingUrl: campsite?.bookingUrl,
       },
       { time: sunset, title: 'Sunset', description: 'Good time for a beach walk or scenic lookout.' },
     ]
@@ -264,6 +276,8 @@ function buildDayTripItinerary(
       time: minutesLater(arriveTime, 10),
       title: `${activityVerb(primary.type)} — ${primary.name}`,
       description: conditionsNote,
+      costAud: primary.costAud,
+      bookingUrl: primary.bookingUrl,
     })
   }
 
@@ -274,6 +288,8 @@ function buildDayTripItinerary(
       time: '13:30',
       title: `${activityVerb(secondary.type)} — ${secondary.name}`,
       description: secondary.notes,
+      costAud: secondary.costAud,
+      bookingUrl: secondary.bookingUrl,
     })
   } else if (primary) {
     stops.push({

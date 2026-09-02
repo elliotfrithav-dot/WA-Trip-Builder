@@ -112,6 +112,16 @@ export function MapView({ highlightedRegionId, height = '420px', visibleRegionId
               <strong>{c.name}</strong>
               <br />
               {c.campingType.replace(/-/g, ' ')}
+              <br />
+              💰 {c.feesAud}
+              {c.bookingUrl && (
+                <>
+                  <br />
+                  <a href={c.bookingUrl} target="_blank" rel="noopener noreferrer">
+                    Book →
+                  </a>
+                </>
+              )}
             </Popup>
           </Marker>
         ))}
@@ -121,6 +131,20 @@ export function MapView({ highlightedRegionId, height = '420px', visibleRegionId
               <strong>{s.name}</strong>
               <br />
               {s.type} · {s.difficulty}
+              {s.costAud && (
+                <>
+                  <br />
+                  💰 {s.costAud}
+                </>
+              )}
+              {s.bookingUrl && (
+                <>
+                  <br />
+                  <a href={s.bookingUrl} target="_blank" rel="noopener noreferrer">
+                    Book →
+                  </a>
+                </>
+              )}
             </Popup>
           </Marker>
         ))}

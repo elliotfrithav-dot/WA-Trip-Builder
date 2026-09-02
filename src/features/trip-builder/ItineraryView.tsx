@@ -66,6 +66,17 @@ export function ItineraryView({
                 <div>
                   <p className="text-sm font-medium text-ink-900">{stop.title}</p>
                   {stop.description && <p className="text-xs text-ink-500">{stop.description}</p>}
+                  {stop.costAud && <p className="text-xs text-ink-500">💰 {stop.costAud}</p>}
+                  {stop.bookingUrl && (
+                    <a
+                      href={stop.bookingUrl}
+                      target="_blank"
+                      rel="noopener noreferrer"
+                      className="text-xs font-medium text-teal-800 underline decoration-teal-800/30 underline-offset-2"
+                    >
+                      Book →
+                    </a>
+                  )}
                 </div>
               </li>
             ))}

@@ -104,6 +104,10 @@ export interface ActivitySite extends Sourced {
   hazards?: string[]
   dogPolicy: DogPolicy
   distanceFromParkingM?: number
+  /** Cost to visit/dive/tour, where one applies — free shore sites typically leave this unset. */
+  costAud?: string
+  /** Official booking link — the site's own operator/authority, not a guessed third-party URL. */
+  bookingUrl?: string
   notes?: string
 }
 
