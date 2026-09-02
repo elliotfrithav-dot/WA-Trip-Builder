@@ -147,7 +147,9 @@ export function GuidePage() {
         4WD/sand-driving tyre-pressure and tide guidance adapted from Defender Adventure's WA beaches 4WD guide;
         camping spot details cross-checked against RAC WA, 4WDing Australia, We Are Explorers, Hipcamp, PerthIsOK,
         4Xploring Rentals, The Urban List, Caravan World and Club4x4 where cited on individual campsites. Dive site
-        details cross-checked against Avenue Perth, RAC WA and Bucket List Diver where cited on individual sites.
+        details cross-checked against Avenue Perth, RAC WA, Bucket List Diver and Scuba Down Under where cited on
+        individual sites. Wildlife seasonality for the Ningaloo/Shark Bay area informed by a general WA marine-life
+        sightings calendar the user shared.
       </p>
     </div>
   )
