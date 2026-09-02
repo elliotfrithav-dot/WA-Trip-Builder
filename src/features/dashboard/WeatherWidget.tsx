@@ -6,7 +6,12 @@ import { fetchMarineForecast, marineForDate, type DailyMarine } from '../../serv
 import { PERTH } from '../../data/regions'
 import { todayIso } from '../../lib/dates'
 
-export function WeatherWidget() {
+interface WeatherWidgetProps {
+  /** When set, shows this fixed location's weather instead of using GPS/Perth-fallback. */
+  fixedLocation?: { id: string; name: string; lat: number; lng: number }
+}
+
+export function WeatherWidget({ fixedLocation }: WeatherWidgetProps = {}) {
   const [loading, setLoading] = useState(true)
   const [usingGps, setUsingGps] = useState(false)
   const [weather, setWeather] = useState<DailyWeather | null>(null)
@@ -14,15 +19,26 @@ export function WeatherWidget() {
 
   useEffect(() => {
     let cancelled = false
+    setLoading(true)
     ;(async () => {
-      const gps: GeoPoint | null = await getCurrentLocation()
-      const point = gps ?? PERTH
-      if (cancelled) return
-      setUsingGps(Boolean(gps))
+      let id: string
+      let point: GeoPoint
+
+      if (fixedLocation) {
+        id = fixedLocation.id
+        point = { lat: fixedLocation.lat, lng: fixedLocation.lng }
+      } else {
+        const gps: GeoPoint | null = await getCurrentLocation()
+        if (cancelled) return
+        id = 'current-location'
+        point = gps ?? PERTH
+        setUsingGps(Boolean(gps))
+      }
+
       try {
         const [w, m] = await Promise.all([
-          fetchWeatherForecast('current-location', point.lat, point.lng),
-          fetchMarineForecast('current-location', point.lat, point.lng),
+          fetchWeatherForecast(id, point.lat, point.lng),
+          fetchMarineForecast(id, point.lat, point.lng),
         ])
         if (cancelled) return
         setWeather(weatherForDate(w, todayIso()) ?? w.days[0] ?? null)
@@ -34,7 +50,7 @@ export function WeatherWidget() {
     return () => {
       cancelled = true
     }
-  }, [])
+  }, [fixedLocation?.id])
 
   if (loading) {
     return (
@@ -56,9 +72,11 @@ export function WeatherWidget() {
     <Card className="p-5">
       <div className="flex items-center justify-between">
         <h3 className="font-display text-sm font-semibold uppercase tracking-wide text-ink-500">
-          {usingGps ? 'Today, near you' : 'Today, Perth'}
+          {fixedLocation ? `Today, ${fixedLocation.name}` : usingGps ? 'Today, near you' : 'Today, Perth'}
         </h3>
-        <span className="text-xs text-ink-300">{usingGps ? '📍 Your location' : '📍 Location unavailable'}</span>
+        {!fixedLocation && (
+          <span className="text-xs text-ink-300">{usingGps ? '📍 Your location' : '📍 Location unavailable'}</span>
+        )}
       </div>
 
       <div className="mt-3 flex items-end gap-3">

@@ -12,6 +12,7 @@ import { formatDriveTime } from '../services/distance'
 import { CAMPING_LABELS, ACTIVITY_META } from '../data/activityMeta'
 import { CONFIDENCE_LABEL } from '../lib/confidence'
 import { getCart, toggleCart, type CartKind } from '../lib/customTripCart'
+import { WeatherWidget } from '../features/dashboard/WeatherWidget'
 import type { ActivitySiteType } from '../data/types'
 
 const TYPE_ICON: Record<ActivitySiteType, string> = {
@@ -89,6 +90,8 @@ export function RegionDetailPage() {
           )}
         </div>
       </div>
+
+      <WeatherWidget fixedLocation={{ id: region.id, name: region.name, lat: region.lat, lng: region.lng }} />
 
       <MapView standalone visibleRegionIds={[region.id]} height="320px" />
 
