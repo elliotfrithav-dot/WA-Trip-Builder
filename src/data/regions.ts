@@ -72,6 +72,18 @@ export const regions: Region[] = [
     heroImageCredit: 'Public domain (Ausxan, Wikimedia Commons)',
   },
   {
+    id: 'guilderton',
+    name: 'Guilderton',
+    lat: -31.3452,
+    lng: 115.4886,
+    driveDistanceFromPerthKm: 95,
+    driveTimeFromPerthMin: 75,
+    blurb: 'Small river-mouth town where the Moore River meets the ocean — canoeing, fishing, sandboarding and a 4WD track along the coast.',
+    activities: ['swimming', 'four-wd', 'scenic', 'beaches', 'photography'],
+    nearestFuelTown: 'Guilderton',
+    nearestMedicalTown: 'Two Rocks/Yanchep or Joondalup Health Campus',
+  },
+  {
     id: 'lancelin',
     name: 'Lancelin',
     lat: -31.0225,

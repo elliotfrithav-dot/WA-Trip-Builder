@@ -13,7 +13,7 @@ import type { Region } from '../../data/types'
 // Regions ordered by distance from Perth in each direction. North-beach and
 // Coogee (Perth-metro micro spots) are excluded — too close to make a
 // sensible road-trip "leg".
-const NORTH_CORRIDOR = ['two-rocks', 'yanchep', 'lancelin', 'cervantes', 'jurien-bay']
+const NORTH_CORRIDOR = ['two-rocks', 'yanchep', 'guilderton', 'lancelin', 'cervantes', 'jurien-bay']
 const SOUTH_CORRIDOR = ['fremantle', 'rockingham', 'mandurah', 'bunbury', 'busselton', 'dunsborough', 'yallingup', 'margaret-river']
 
 function nightsBetween(start: string, end: string): number {

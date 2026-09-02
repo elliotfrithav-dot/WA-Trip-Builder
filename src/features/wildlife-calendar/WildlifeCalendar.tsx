@@ -108,7 +108,18 @@ export function WildlifeCalendar() {
           ) : (
             <div className="grid gap-3 sm:grid-cols-2">
               {monthResults.map((w) => (
-                <Card key={w.id} className="p-4">
+                <Card key={w.id} className="overflow-hidden p-0">
+                  {w.image && (
+                    <div className="relative h-28 w-full">
+                      <img src={w.image} alt="" className="h-full w-full object-cover" />
+                      {w.imageCredit && (
+                        <span className="absolute bottom-1 right-1.5 rounded bg-ink-900/50 px-1.5 py-0.5 text-[9px] text-cream-50">
+                          {w.imageCredit}
+                        </span>
+                      )}
+                    </div>
+                  )}
+                  <div className="p-4">
                   <div className="flex items-center gap-2">
                     <span className="text-2xl">{w.emoji}</span>
                     <div>
@@ -125,6 +136,7 @@ export function WildlifeCalendar() {
                   <p className="mt-2 text-xs text-ink-500">
                     Best spots: {w.bestRegionIds.map((id) => findRegion(id)?.name).filter(Boolean).join(', ')}
                   </p>
+                  </div>
                 </Card>
               ))}
             </div>
@@ -146,7 +158,18 @@ export function WildlifeCalendar() {
             ))}
           </select>
 
-          <Card className="p-5">
+          <Card className="overflow-hidden p-0">
+            {species.image && (
+              <div className="relative h-48 w-full">
+                <img src={species.image} alt="" className="h-full w-full object-cover" />
+                {species.imageCredit && (
+                  <span className="absolute bottom-1.5 right-2 rounded bg-ink-900/50 px-2 py-1 text-[10px] text-cream-50">
+                    {species.imageCredit}
+                  </span>
+                )}
+              </div>
+            )}
+            <div className="p-5">
             <div className="flex items-center gap-3">
               <span className="text-4xl">{species.emoji}</span>
               <div>
@@ -220,6 +243,7 @@ export function WildlifeCalendar() {
                   )
                 })}
               </div>
+            </div>
             </div>
           </Card>
         </>

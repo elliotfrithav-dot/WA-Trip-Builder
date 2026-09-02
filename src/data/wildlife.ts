@@ -1,4 +1,26 @@
 import type { WildlifeSpecies } from './types'
+import dolphinImg from '../assets/wildlife/dolphin.jpg'
+import seaLionImg from '../assets/wildlife/sea-lion.jpg'
+import humpbackWhaleImg from '../assets/wildlife/humpback-whale.png'
+import southernRightWhaleImg from '../assets/wildlife/southern-right-whale.jpg'
+import greenTurtleImg from '../assets/wildlife/green-turtle.jpg'
+import weedySeadragonImg from '../assets/wildlife/weedy-seadragon.jpg'
+import westernBlueGroperImg from '../assets/wildlife/western-blue-groper.jpg'
+import wobbegongImg from '../assets/wildlife/wobbegong.jpg'
+import ospreyImg from '../assets/wildlife/osprey.jpg'
+import carnabysCockatooImg from '../assets/wildlife/carnabys-cockatoo.jpg'
+import pacificGullImg from '../assets/wildlife/pacific-gull.jpg'
+import westernGreyKangarooImg from '../assets/wildlife/western-grey-kangaroo.jpg'
+import quokkaImg from '../assets/wildlife/quokka.jpg'
+import koalaImg from '../assets/wildlife/koala.jpg'
+import dugiteImg from '../assets/wildlife/dugite.png'
+import bobtailImg from '../assets/wildlife/bobtail.jpg'
+import goannaImg from '../assets/wildlife/goanna.jpg'
+import karriImg from '../assets/wildlife/karri.jpg'
+import tuartImg from '../assets/wildlife/tuart.jpg'
+import grassTreeImg from '../assets/wildlife/grass-tree.jpg'
+import kangarooPawImg from '../assets/wildlife/kangaroo-paw.jpg'
+import banksiaImg from '../assets/wildlife/banksia.jpg'
 
 export const wildlifeSpecies: WildlifeSpecies[] = [
   // --- Marine ---
@@ -17,6 +39,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: false,
     boatOnly: false,
     safety: 'Keep a respectful distance; do not feed or chase.',
+    image: dolphinImg,
+    imageCredit: 'CC BY-SA 1.0 (Aude Steiner, Wikimedia Commons)',
   },
   {
     id: 'australian-sea-lion',
@@ -34,6 +58,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     boatOnly: true,
     safety: 'Endangered species — never touch or corner an animal. Large males can bite.',
     conservationStatus: 'Endangered (EPBC Act)',
+    image: seaLionImg,
+    imageCredit: 'CC BY-SA 3.0 (DiverDave, Wikimedia Commons)',
   },
   {
     id: 'humpback-whale',
@@ -50,6 +76,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: false,
     boatOnly: true,
     safety: 'Approach only via licensed whale-watching operators; keep legal distance from a private vessel.',
+    image: humpbackWhaleImg,
+    imageCredit: 'Public domain (NOAA, Wikimedia Commons)',
   },
   {
     id: 'southern-right-whale',
@@ -66,6 +94,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: false,
     boatOnly: false,
     conservationStatus: 'Recovering after historical whaling; still protected',
+    image: southernRightWhaleImg,
+    imageCredit: 'CC BY-SA 2.0 (Gregory "Slobirdr" Smith, Wikimedia Commons)',
   },
   {
     id: 'green-turtle',
@@ -82,6 +112,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: true,
     boatOnly: false,
     conservationStatus: 'Vulnerable (IUCN)',
+    image: greenTurtleImg,
+    imageCredit: 'Public domain (David Vogel/USFWS, Wikimedia Commons)',
   },
   {
     id: 'reef-manta-ray',
@@ -114,6 +146,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: true,
     boatOnly: false,
     conservationStatus: 'Protected in WA waters',
+    image: weedySeadragonImg,
+    imageCredit: 'CC BY-SA 4.0 (Wiki Loves Earth 2017, Wikimedia Commons)',
   },
   {
     id: 'western-blue-groper',
@@ -130,6 +164,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: true,
     boatOnly: false,
     conservationStatus: 'Protected species in WA — no take',
+    image: westernBlueGroperImg,
+    imageCredit: 'CC BY-SA 3.0 (Wikimedia Commons)',
   },
   {
     id: 'wobbegong-shark',
@@ -146,6 +182,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: true,
     boatOnly: false,
     safety: 'Docile if left alone, but can bite defensively if stepped on or cornered — look, don’t touch.',
+    image: wobbegongImg,
+    imageCredit: 'CC BY-SA 4.0 (Stephc2000, Wikimedia Commons)',
   },
   {
     id: 'western-rock-lobster',
@@ -194,6 +232,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     snorkelSuitable: false,
     diveSuitable: false,
     boatOnly: false,
+    image: ospreyImg,
+    imageCredit: 'Public domain (NASA, Wikimedia Commons)',
   },
   {
     id: 'carnabys-black-cockatoo',
@@ -210,6 +250,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: false,
     boatOnly: false,
     conservationStatus: 'Endangered — WA endemic',
+    image: carnabysCockatooImg,
+    imageCredit: 'CC BY-SA 2.0 (Wikimedia Commons)',
   },
   {
     id: 'rainbow-bee-eater',
@@ -240,6 +282,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     snorkelSuitable: false,
     diveSuitable: false,
     boatOnly: false,
+    image: pacificGullImg,
+    imageCredit: 'CC BY-SA 3.0 (Wikimedia Commons)',
   },
   {
     id: 'new-holland-honeyeater',
@@ -273,6 +317,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: false,
     boatOnly: false,
     safety: 'Dawn/dusk road hazard on rural roads — drive to conditions and watch verges.',
+    image: westernGreyKangarooImg,
+    imageCredit: 'CC BY 2.5 AU (JarrahTree, Wikimedia Commons)',
   },
   {
     id: 'quokka-mainland',
@@ -289,6 +335,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: false,
     boatOnly: false,
     conservationStatus: 'Vulnerable (IUCN) — never feed or handle if you do see one.',
+    image: quokkaImg,
+    imageCredit: 'CC BY 2.0 (GregTheBusker, Wikimedia Commons — photographed on Rottnest Island, illustrative of the species)',
   },
   {
     id: 'koala-yanchep',
@@ -305,6 +353,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: false,
     boatOnly: false,
     conservationStatus: 'Not a WA-native species — an introduced/managed population, not wild dispersal.',
+    image: koalaImg,
+    imageCredit: 'CC BY-SA 3.0 (Erik Veland, Wikimedia Commons — illustrative of the species, not photographed at Yanchep)',
   },
   {
     id: 'western-brush-wallaby',
@@ -336,6 +386,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: false,
     boatOnly: false,
     safety: 'Venomous — do not approach or attempt to handle. Wear closed shoes on bush tracks, watch where you step/place hands, and seek urgent medical help (000) for any bite.',
+    image: dugiteImg,
+    imageCredit: 'CC BY-SA 4.0 (Bradford G. Jones, Wikimedia Commons — photographed in WA)',
   },
   {
     id: 'bobtail-lizard',
@@ -352,6 +404,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: false,
     boatOnly: false,
     safety: 'Harmless, but a common road hazard while basking — slow down on bush roads in warmer months.',
+    image: bobtailImg,
+    imageCredit: 'Public domain (Papphase, Wikimedia Commons)',
   },
   {
     id: 'rosenbergs-goanna',
@@ -369,6 +423,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     boatOnly: false,
     safety: 'Give it space — a large goanna can deliver a serious bite or scratch if provoked.',
     conservationStatus: 'Listed as threatened in some WA assessments — do not disturb.',
+    image: goannaImg,
+    imageCredit: 'CC BY 2.0 (Paul Asman & Jill Lenoble, Wikimedia Commons — illustrative of the species)',
   },
 
   // --- Plants / flora ---
@@ -386,6 +442,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     snorkelSuitable: false,
     diveSuitable: false,
     boatOnly: false,
+    image: karriImg,
+    imageCredit: 'CC BY-SA 3.0 (Wikimedia Commons — Pemberton karri forest)',
   },
   {
     id: 'tuart-tree',
@@ -402,6 +460,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: false,
     boatOnly: false,
     conservationStatus: 'Endemic and restricted in range — old-growth stands are protected.',
+    image: tuartImg,
+    imageCredit: 'CC BY-SA 4.0 (Wikimedia Commons — Tuart Forest National Park)',
   },
   {
     id: 'grass-tree',
@@ -418,6 +478,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     diveSuitable: false,
     boatOnly: false,
     safety: 'Very slow-growing — never climb on or damage the trunk.',
+    image: grassTreeImg,
+    imageCredit: 'CC BY-SA 3.0 (Wikimedia Commons)',
   },
   {
     id: 'kangaroo-paw',
@@ -433,6 +495,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     snorkelSuitable: false,
     diveSuitable: false,
     boatOnly: false,
+    image: kangarooPawImg,
+    imageCredit: 'CC BY 2.5 AU (Gnangarra, Wikimedia Commons)',
   },
   {
     id: 'banksia',
@@ -448,6 +512,8 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     snorkelSuitable: false,
     diveSuitable: false,
     boatOnly: false,
+    image: banksiaImg,
+    imageCredit: 'CC BY 2.5 AU (Gnangarra, Wikimedia Commons)',
   },
 ]
 

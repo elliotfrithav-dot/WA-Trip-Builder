@@ -121,6 +121,8 @@ export interface WildlifeSpecies {
   scientificName: string
   emoji: string
   category: WildlifeCategory
+  image?: string
+  imageCredit?: string
   bestRegionIds: string[]
   season: WildlifeSeasonWindow
   habitat: string
