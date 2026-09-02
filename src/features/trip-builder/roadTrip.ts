@@ -7,6 +7,7 @@ import { fetchMarineForecast, marineForDate } from '../../services/marine'
 import { estimateInterRegionDriveMin, haversineKm } from '../../services/distance'
 import { estimateTide } from '../../services/tides'
 import { isDogOk } from '../../lib/dogPolicy'
+import { CAMPING_LABELS } from '../../data/activityMeta'
 import type { TripCriteria, TripOption, ScoreBreakdown, RoadTripStop } from './types'
 import type { Region } from '../../data/types'
 
@@ -56,7 +57,7 @@ function regionMatchScore(region: Region, criteria: TripCriteria): number {
   return region.activities.filter((a) => criteria.activities.includes(a)).length
 }
 
-function regionPassesCampingFilter(region: Region, criteria: TripCriteria): boolean {
+function regionCampingMatches(region: Region, criteria: TripCriteria): boolean {
   if (criteria.campingPreference === 'no-camping' || criteria.campingPreference === 'dont-care') return true
   return campsitesForRegion(region.id).some((c) => c.campingType === criteria.campingPreference)
 }
@@ -92,13 +93,19 @@ async function buildCorridorOption(
     .map((id) => findRegion(id))
     .filter((r): r is Region => Boolean(r))
     .filter((r) => r.driveTimeFromPerthMin <= maxOneWayDriveMin)
-    .filter((r) => regionPassesCampingFilter(r, criteria) && regionDogOk(r, criteria))
 
-  if (candidates.length < 2) return null // need at least 2 stops for a "road trip"
+  if (candidates.length < 2) return null // this direction has nowhere reachable to make a "road trip" from
 
-  // Pick the best-matching regions, then restore geographic order so the
-  // route actually makes sense to drive.
-  const ranked = [...candidates].sort((a, b) => regionMatchScore(b, criteria) - regionMatchScore(a, criteria))
+  // Rank by activity match first, with camping/dog preference match as a
+  // tiebreaker — but never exclude a region just for not matching. A
+  // mismatch shows up as a concession on the final option instead.
+  const ranked = [...candidates].sort((a, b) => {
+    const activityDiff = regionMatchScore(b, criteria) - regionMatchScore(a, criteria)
+    if (activityDiff !== 0) return activityDiff
+    const aPref = (regionCampingMatches(a, criteria) ? 1 : 0) + (regionDogOk(a, criteria) ? 1 : 0)
+    const bPref = (regionCampingMatches(b, criteria) ? 1 : 0) + (regionDogOk(b, criteria) ? 1 : 0)
+    return bPref - aPref
+  })
   const stopCount = Math.min(requestedStops, candidates.length)
   const chosen = ranked.slice(0, stopCount)
   const orderedStops = corridorIds.map((id) => chosen.find((r) => r.id === id)).filter((r): r is Region => Boolean(r))
@@ -126,6 +133,7 @@ async function buildCorridorOption(
   const warnings: string[] = [
     'Live conditions were only checked for the first stop — check weather/swell for later stops closer to departure.',
   ]
+  const concessions: string[] = []
 
   // --- Activity variety across the whole route ---
   const allActivities = new Set(orderedStops.flatMap((r) => r.activities))
@@ -141,6 +149,9 @@ async function buildCorridorOption(
     maxPoints: 25,
     reason: `${orderedStops.length} stops covering ${allActivities.size} distinct activity types`,
   })
+  if (criteria.activities.length > 0 && matchedActivities === 0) {
+    concessions.push(`This route doesn't cover any of your selected activities well — included anyway as the best-scoring ${direction}bound option.`)
+  }
 
   // --- First-stop live conditions (representative) ---
   let weatherPoints = 15
@@ -162,23 +173,51 @@ async function buildCorridorOption(
   }
   breakdown.push({ label: 'Day-1 conditions', points: weatherPoints, maxPoints: 25, reason: weatherReason })
 
-  // --- Camping availability ---
-  const campingPoints = orderedStops.every((r) => campsitesForRegion(r.id).length > 0) ? 20 : 10
+  // --- Camping preference match (soft — per-stop gaps are named, not excluded) ---
+  const campingPreferenceSet = criteria.campingPreference !== 'no-camping' && criteria.campingPreference !== 'dont-care'
+  const stopsWithoutCamping = orderedStops.filter((r) => campsitesForRegion(r.id).length === 0)
+  const stopsMismatchingCamping = campingPreferenceSet ? orderedStops.filter((r) => !regionCampingMatches(r, criteria)) : []
+
+  const campingPoints = campingPreferenceSet
+    ? Math.max(2, 20 - stopsMismatchingCamping.length * (20 / orderedStops.length))
+    : stopsWithoutCamping.length === 0
+      ? 20
+      : Math.max(5, 20 - stopsWithoutCamping.length * (20 / orderedStops.length))
   breakdown.push({
     label: 'Camping availability',
-    points: campingPoints,
+    points: Math.round(campingPoints),
     maxPoints: 20,
-    reason: campingPoints === 20 ? 'All stops have seed campsite data' : 'One or more stops has no seed campsite data',
+    reason:
+      campingPreferenceSet && stopsMismatchingCamping.length > 0
+        ? `${stopsMismatchingCamping.length}/${orderedStops.length} stops don't have ${CAMPING_LABELS[criteria.campingPreference]}`
+        : stopsWithoutCamping.length > 0
+          ? `${stopsWithoutCamping.length}/${orderedStops.length} stops have no seed campsite data`
+          : 'All stops have matching campsite data',
   })
+  if (campingPreferenceSet && stopsMismatchingCamping.length > 0) {
+    concessions.push(
+      `${stopsMismatchingCamping.map((r) => r.name).join(', ')} — no confirmed ${CAMPING_LABELS[criteria.campingPreference]}. Verify accommodation for these stops.`,
+    )
+  } else if (stopsWithoutCamping.length > 0) {
+    concessions.push(`${stopsWithoutCamping.map((r) => r.name).join(', ')} — no seed camping data at all yet.`)
+  }
 
   // --- Dog suitability ---
-  const dogFriendly = orderedStops.every((r) => regionDogOk(r, criteria))
+  const stopsNotDogOk = orderedStops.filter((r) => !regionDogOk(r, criteria))
+  const dogFriendly = stopsNotDogOk.length === 0
   breakdown.push({
     label: 'Dog suitability',
-    points: !criteria.bringingDog ? 10 : dogFriendly ? 10 : 3,
+    points: !criteria.bringingDog ? 10 : dogFriendly ? 10 : Math.max(2, 10 - stopsNotDogOk.length * (10 / orderedStops.length)),
     maxPoints: 10,
-    reason: !criteria.bringingDog ? 'Not travelling with a dog' : dogFriendly ? 'Dog-friendly options at each stop' : 'Limited dog access at one or more stops',
+    reason: !criteria.bringingDog
+      ? 'Not travelling with a dog'
+      : dogFriendly
+        ? 'Dog-friendly options at each stop'
+        : `${stopsNotDogOk.length}/${orderedStops.length} stops have no confirmed dog-friendly camping`,
   })
+  if (criteria.bringingDog && stopsNotDogOk.length > 0) {
+    concessions.push(`${stopsNotDogOk.map((r) => r.name).join(', ')} — no confirmed dog-friendly camping. Verify before bringing your dog.`)
+  }
 
   // --- Route sensibility ---
   breakdown.push({
@@ -226,6 +265,7 @@ async function buildCorridorOption(
     dogFriendly,
     estimatedBudget: criteria.budget ?? 'moderate',
     warnings,
+    concessions,
     stops,
   }
 }

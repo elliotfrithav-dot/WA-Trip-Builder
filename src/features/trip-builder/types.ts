@@ -56,6 +56,8 @@ export interface TripOption {
   dogFriendly: boolean
   estimatedBudget: BudgetLevel
   warnings: string[]
+  /** Criteria this option couldn't fully satisfy (e.g. no matching campsite type, no confirmed dog access) — shown transparently instead of excluding the option outright. */
+  concessions: string[]
   /** Present for day-trip snorkel/swim options — the live Excellent..Unsafe grade for the primary site. */
   conditionsGrade?: SiteConditionsResult
   /** Present when the user asked to find the best nearby day — the top-ranked day within the scan window. */

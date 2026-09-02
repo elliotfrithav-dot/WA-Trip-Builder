@@ -60,6 +60,19 @@ export function TripOptionCard({ option, rank, onBuild }: TripOptionCardProps) {
         )}
       </div>
 
+      {option.concessions.length > 0 && (
+        <div className="mt-3 rounded-xl border border-terracotta-400/30 bg-terracotta-400/5 px-4 py-2.5">
+          <p className="text-xs font-semibold uppercase tracking-wide text-terracotta-600">Doesn't fully match your criteria</p>
+          <ul className="mt-1 space-y-1">
+            {option.concessions.map((c, i) => (
+              <li key={i} className="text-xs text-ink-700">
+                {c}
+              </li>
+            ))}
+          </ul>
+        </div>
+      )}
+
       {option.bestDayRecommendation && (
         <div className="mt-3 rounded-xl bg-ocean-500/10 px-4 py-2.5 text-sm text-ocean-600">
           💡 Conditions look better on <strong>{formatDayLabel(option.bestDayRecommendation.date)}</strong> (

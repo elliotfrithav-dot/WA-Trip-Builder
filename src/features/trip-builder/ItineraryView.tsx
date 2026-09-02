@@ -82,6 +82,19 @@ export function ItineraryView({
         return region ? <SafetyCard regions={[region]} /> : null
       })()}
 
+      {option.concessions.length > 0 && (
+        <Card className="border-terracotta-400/30 bg-terracotta-400/5 p-4">
+          <p className="mb-1 text-xs font-semibold uppercase tracking-wide text-terracotta-600">
+            Doesn't fully match your criteria
+          </p>
+          <ul className="space-y-1 text-xs text-ink-700">
+            {option.concessions.map((c, i) => (
+              <li key={i}>{c}</li>
+            ))}
+          </ul>
+        </Card>
+      )}
+
       <PackingChecklist items={packingList} onChange={onPackingListChange} />
 
       {option.warnings.length > 0 && (

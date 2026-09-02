@@ -7,6 +7,7 @@ import { fetchMarineForecast, marineForDate } from '../../services/marine'
 import { estimateTide } from '../../services/tides'
 import { gradeSiteConditions, findBestDays, GRADE_LABEL } from '../../services/siteConditions'
 import { isDogOk } from '../../lib/dogPolicy'
+import { CAMPING_LABELS } from '../../data/activityMeta'
 import type { TripCriteria, TripOption, ScoreBreakdown } from './types'
 import type { Region, ActivitySite } from '../../data/types'
 
@@ -44,24 +45,38 @@ async function scoreMultiDayRegion(region: Region, criteria: TripCriteria): Prom
   const wildlife = wildlifeForRegion(region.id)
   const nights = nightsBetween(criteria.startDate, criteria.endDate)
 
-  // --- Hard filters ---
-  // Only require a matching campsite when the user picked a *specific* camping
-  // type. "Don't care" and "No camping" both allow a region through regardless
-  // of whether it happens to have seed campsite data.
-  if (criteria.campingPreference !== 'no-camping' && criteria.campingPreference !== 'dont-care') {
-    const hasMatchingCampsite = campsites.some((c) => c.campingType === criteria.campingPreference)
-    if (!hasMatchingCampsite) return null
-  }
-
-  let dogFriendly = true
-  if (criteria.bringingDog) {
-    const campsiteDogOk = campsites.length === 0 || campsites.some((c) => isDogOk(c.dogPolicy))
-    if (criteria.campingPreference !== 'no-camping' && !campsiteDogOk) return null
-    dogFriendly = campsiteDogOk
-  }
-
   const breakdown: ScoreBreakdown[] = []
   const warnings: string[] = []
+  const concessions: string[] = []
+
+  // --- Camping preference match (soft — a mismatch is shown, not excluded) ---
+  const campingPreferenceSet = criteria.campingPreference !== 'no-camping' && criteria.campingPreference !== 'dont-care'
+  const campingMatches = !campingPreferenceSet || campsites.some((c) => c.campingType === criteria.campingPreference)
+  if (campingPreferenceSet) {
+    breakdown.push({
+      label: 'Camping preference',
+      points: campingMatches ? 10 : campsites.length > 0 ? 4 : 1,
+      maxPoints: 10,
+      reason: campingMatches
+        ? `${CAMPING_LABELS[criteria.campingPreference]} confirmed here`
+        : campsites.length > 0
+          ? `No ${CAMPING_LABELS[criteria.campingPreference]} here — but ${campsites.length} other campsite${campsites.length !== 1 ? 's' : ''} available`
+          : 'No seed camping data for this region at all',
+    })
+    if (!campingMatches) {
+      concessions.push(
+        campsites.length > 0
+          ? `Doesn't have ${CAMPING_LABELS[criteria.campingPreference]} — closest available here: ${[...new Set(campsites.map((c) => CAMPING_LABELS[c.campingType]))].join(', ')}.`
+          : `No camping data at all for this region — you'd need to find accommodation another way.`,
+      )
+    }
+  }
+
+  // --- Dog access (soft) ---
+  const dogFriendly = campsites.length === 0 || campsites.some((c) => isDogOk(c.dogPolicy))
+  if (criteria.bringingDog && !dogFriendly) {
+    concessions.push('No confirmed dog-friendly camping here — verify before bringing your dog, or leave them behind for this one.')
+  }
 
   // --- Distance suitability (closer to the limit's "sweet spot" scores higher) ---
   const driveRatio = region.driveTimeFromPerthMin / (criteria.maxDriveHours * 60)
@@ -198,6 +213,7 @@ async function scoreMultiDayRegion(region: Region, criteria: TripCriteria): Prom
     dogFriendly,
     estimatedBudget: criteria.budget ?? 'moderate',
     warnings,
+    concessions,
   }
 }
 
@@ -213,20 +229,27 @@ async function scoreDayTripRegion(region: Region, criteria: TripCriteria): Promi
 
   const wantedActivities = criteria.activities.length > 0 ? criteria.activities : region.activities
   const matchedActivities = region.activities.filter((a) => wantedActivities.includes(a))
-  if (criteria.activities.length > 0 && matchedActivities.length === 0) return null
+
+  const breakdown: ScoreBreakdown[] = []
+  const warnings: string[] = []
+  const concessions: string[] = []
+
+  if (criteria.activities.length > 0 && matchedActivities.length === 0) {
+    concessions.push(`Doesn't match any of your selected activities — included anyway based on distance and general character.`)
+  }
 
   // A region's high-level activity tags (e.g. Cervantes lists "snorkelling"
   // for the broader coastline) don't guarantee an actual mapped site here.
-  // If the user specifically asked for a water activity, require a real
-  // water-capable site rather than recommending a region on reputation alone.
+  // If the user specifically asked for a water activity but there's no real
+  // water-capable site, that's a genuine gap — flag it rather than silently
+  // recommending the region on reputation alone.
   const waterCapableSites = sites.filter((s) => s.type === 'snorkel' || s.type === 'dive' || s.type === 'beach')
   const requestedWaterActivities = criteria.activities.filter((a) =>
     (WATER_ACTIVITIES as readonly string[]).includes(a),
   )
-  if (requestedWaterActivities.length > 0 && waterCapableSites.length === 0) return null
-
-  const breakdown: ScoreBreakdown[] = []
-  const warnings: string[] = []
+  if (requestedWaterActivities.length > 0 && waterCapableSites.length === 0) {
+    concessions.push('No confirmed snorkel/dive/beach site here for your selected water activity — verify locally or pick another option.')
+  }
 
   // --- Distance: closer is strictly better for a day trip ---
   const driveMin = region.driveTimeFromPerthMin
@@ -341,7 +364,7 @@ async function scoreDayTripRegion(region: Region, criteria: TripCriteria): Promi
       : 'Not travelling with a dog',
   })
   if (criteria.bringingDog && !dogFriendly && primarySite) {
-    warnings.push(`${primarySite.name} does not allow dogs — verify if another spot nearby is more suitable.`)
+    concessions.push(`${primarySite.name} does not allow dogs — verify if another spot nearby is more suitable.`)
   }
 
   const totalMax = breakdown.reduce((s, b) => s + b.maxPoints, 0)
@@ -369,6 +392,7 @@ async function scoreDayTripRegion(region: Region, criteria: TripCriteria): Promi
     dogFriendly,
     estimatedBudget: criteria.budget ?? 'free',
     warnings,
+    concessions,
     conditionsGrade,
     bestDayRecommendation,
   }

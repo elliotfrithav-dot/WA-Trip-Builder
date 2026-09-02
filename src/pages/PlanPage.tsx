@@ -39,11 +39,7 @@ export function PlanPage() {
       setOptions(results)
       setStage('results')
       if (results.length === 0) {
-        setError(
-          c.tripLength === 'road-trip'
-            ? 'No viable road-trip route found for these constraints — try more nights, more stops, or relaxing an activity/camping filter.'
-            : 'No matching adventures found for these constraints — try increasing your drive time or relaxing a filter.',
-        )
+        setError('Nothing is within your drive limit — try increasing "How far are you willing to drive?" and searching again.')
       }
     } catch {
       setError('Something went wrong generating trip options. Please try again.')
