@@ -1,0 +1,77 @@
+@import "tailwindcss";
+
+@theme {
+  /* Premium + outdoorsy + technical + calm palette */
+  --color-cream-50: #fbfaf6;
+  --color-cream-100: #f4f1e9;
+  --color-cream-200: #e9e3d3;
+  --color-cream-300: #dbd2b8;
+
+  --color-teal-950: #0a1e1c;
+  --color-teal-900: #0f2d2b;
+  --color-teal-800: #163f3c;
+  --color-teal-700: #1f5450;
+  --color-teal-600: #2b6d67;
+  --color-teal-500: #3c8a83;
+  --color-teal-400: #5eaba3;
+
+  --color-ocean-600: #2b6ca3;
+  --color-ocean-500: #3d85c2;
+  --color-ocean-400: #6ba7d6;
+
+  --color-terracotta-600: #a94a24;
+  --color-terracotta-500: #c1622d;
+  --color-terracotta-400: #d98651;
+
+  --color-ink-900: #14201e;
+  --color-ink-700: #2e3b38;
+  --color-ink-500: #5b6b67;
+  --color-ink-300: #93a19d;
+
+  --font-display: "General Sans", "Inter", ui-sans-serif, system-ui, sans-serif;
+  --font-body: "Inter", ui-sans-serif, system-ui, sans-serif;
+}
+
+@custom-variant dark (&:where([data-theme="dark"], [data-theme="dark"] *));
+
+:root {
+  color-scheme: light;
+}
+
+html,
+body,
+#root {
+  height: 100%;
+}
+
+body {
+  font-family: var(--font-body);
+  background-color: var(--color-cream-100);
+  color: var(--color-ink-900);
+  -webkit-tap-highlight-color: transparent;
+  overscroll-behavior-y: none;
+}
+
+[data-theme="dark"] body {
+  background-color: var(--color-teal-950);
+  color: var(--color-cream-100);
+}
+
+/* Leaflet base overrides to fit the calm/premium aesthetic */
+.leaflet-container {
+  font-family: var(--font-body);
+  background: var(--color-cream-200);
+}
+
+.leaflet-popup-content-wrapper {
+  border-radius: 0.75rem;
+}
+
+::-webkit-scrollbar {
+  width: 8px;
+  height: 8px;
+}
+::-webkit-scrollbar-thumb {
+  background: var(--color-ink-300);
+  border-radius: 999px;
+}
