@@ -103,7 +103,7 @@ export const wildlifeSpecies: WildlifeSpecies[] = [
     scientificName: 'Chelonia mydas',
     emoji: '🐢',
     category: 'marine',
-    bestRegionIds: ['jurien-bay', 'lancelin'],
+    bestRegionIds: ['jurien-bay', 'lancelin', 'exmouth'],
     season: { monthsPeak: [12, 1, 2, 3], monthsPossible: [1, 2, 3, 4, 5, 6, 7, 8, 9, 10, 11, 12] },
     habitat: 'Reef and seagrass meadows',
     behaviour: 'Occasional sightings while snorkelling reef edges',
